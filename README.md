@@ -54,7 +54,7 @@ CREATE TABLE online_retail (
 
 ### 2. Carga de Datos
 
-- **Generación de Sentencias SQL para la Carga de Datos**:  Debido a errores en el *Import Wizard* de MySQL al procesar valores numéricos y fechas, se utilizó **Excel** para generar las sentencias `INSERT INTO` de manera manual. Esto se logró concatenando los valores de cada fila con la función `CONCAT`, asegurando que las fechas estuvieran en el formato correcto (`YYYY-MM-DD HH:MM:SS`) y reemplazando valores vacíos por `NULL`. El archivo [`insert_data.sql`](./insert_data.sql) contiene todas las sentencias SQL generadas para la carga de datos.
+- **Generación de Sentencias SQL para la Carga de Datos**:  Debido a errores en el *Import Wizard* de MySQL al procesar valores numéricos y fechas, se utilizó **Excel** para generar las sentencias `INSERT INTO` de manera manual. Esto se logró concatenando los valores de cada fila con la función `CONCAT`, asegurando que las fechas estuvieran en el formato correcto (`YYYY-MM-DD HH:MM:SS`) y reemplazando valores vacíos por `NULL`.
 - **Verificación de la Carga y Número de Registros** : Una vez insertados los datos en la base de datos, se realizó una verificación de la carga para confirmar que el número de registros importados coincidiera con el dataset original. **Total de registros del dataset**: 541,909.
 
 ```sql
@@ -138,7 +138,7 @@ Para comprender mejor el comportamiento de las ventas y los clientes, se desarro
 ```sql
 SELECT
 	DATE_FORMAT(InvoiceDate, '%Y-%m-%d') AS dia,
-    SUM(TotalPrice) AS total_ventas
+	SUM(TotalPrice) AS total_ventas
 FROM online_retail
 GROUP BY dia
 ORDER BY dia;
@@ -183,8 +183,8 @@ ORDER BY hora;
 
 ```sql
 WITH ventas_mensuales_por_producto AS (
-    SELECT 
-        StockCode,
+	SELECT
+		StockCode,
         DATE_FORMAT(InvoiceDate, '%Y-%m') AS mes,
         SUM(TotalPrice) AS total_ventas
     FROM online_retail
@@ -199,11 +199,11 @@ coeficiente_variacion AS (
 )
 SELECT
 	a.StockCode,
-    MAX(Description) AS Description,   -- Tomamos una descripción cualquiera del producto (similares entre sí)
+	MAX(Description) AS Description,   -- Tomamos una descripción cualquiera del producto (similares entre sí)
 	SUM(TotalPrice) AS total_ventas,
 	SUM(Quantity) as total_unidades,
 	COUNT(DISTINCT CustomerID) as total_clientes,
-    b.CV_mensual
+	b.CV_mensual
 FROM online_retail a
 JOIN coeficiente_variacion b ON a.StockCode = b.StockCode
 WHERE Description NOT IN ('DOTCOM POSTAGE', 'POSTAGE')  -- Descartamos transacciones por pago de envíos
@@ -217,11 +217,11 @@ LIMIT 10;
 ```sql
 SELECT
 	Country,
-    SUM(TotalPrice) AS total_ventas,
-    COUNT(DISTINCT CustomerID) AS total_clientes,
-    COUNT(DISTINCT InvoiceNo) AS total_compras,
-    ROUND(COUNT(DISTINCT InvoiceNo) / COUNT(DISTINCT CustomerID), 2) AS compras_por_cliente,
-    ROUND(SUM(TotalPrice) /  COUNT(DISTINCT InvoiceNo), 2) AS valor_promedio_compra
+	SUM(TotalPrice) AS total_ventas,
+	COUNT(DISTINCT CustomerID) AS total_clientes,
+	COUNT(DISTINCT InvoiceNo) AS total_compras,
+	ROUND(COUNT(DISTINCT InvoiceNo) / COUNT(DISTINCT CustomerID), 2) AS compras_por_cliente,
+	ROUND(SUM(TotalPrice) /  COUNT(DISTINCT InvoiceNo), 2) AS valor_promedio_compra
 FROM online_retail
 GROUP BY Country
 ORDER BY total_ventas DESC;
@@ -234,7 +234,7 @@ WITH ventas_por_producto_y_pais AS (
     SELECT 
         Country,
         StockCode,
-        MAX(Description) AS Description,
+		MAX(Description) AS Description,
         SUM(TotalPrice) AS total_ventas,
         ROW_NUMBER() OVER (PARTITION BY Country ORDER BY SUM(TotalPrice) DESC) AS rn
     FROM online_retail
@@ -249,7 +249,7 @@ WHERE rn = 1;
 8. **Devoluciones Totales en Cantidad de Facturas y en Valor Monetario**
 
 ```sql
-SELECT 
+SELECT
     COUNT(DISTINCT CASE WHEN InvoiceNo LIKE 'C%' THEN InvoiceNo END) AS total_facturas_devueltas,
     COUNT(DISTINCT InvoiceNo) AS total_facturas,
     ABS(SUM(CASE WHEN InvoiceNo LIKE 'C%' THEN TotalPrice ELSE 0 END)) AS total_devoluciones,
@@ -260,12 +260,12 @@ FROM online_retail;
 9. **Top 10 Productos más Devueltos (por cantidad de unidades)**
 
 ```sql
-SELECT 
-    StockCode, 
-    Description, 
-    ABS(SUM(Quantity)) AS total_unidades_devueltas,
-    COUNT(DISTINCT CustomerID) AS total_clientes,
-    ABS(SUM(TotalPrice)) AS total_devoluciones
+SELECT
+	StockCode,
+	Description,
+	ABS(SUM(Quantity)) AS total_unidades_devueltas,
+	COUNT(DISTINCT CustomerID) AS total_clientes,
+	ABS(SUM(TotalPrice)) AS total_devoluciones
 FROM online_retail
 WHERE InvoiceNo LIKE 'C%' and StockCode <> 'M' -- Desconsideramos transacciones insertadas manualmente (sin StockCode)
 GROUP BY StockCode, Description
@@ -327,11 +327,9 @@ Los clientes fueron categorizados en los siguientes segmentos según sus puntaje
 - **Clientes Nuevos:** Clientes que han realizado su primera compra recientemente, pero aún no han demostrado lealtad.  
 - **Mejores Clientes:** Aquellos con la mayor frecuencia de compra y el mayor gasto total en el negocio.  
 - **Clientes Premium:** Una combinación de "Grandes Compradores" y "Clientes Frecuentes", es decir, clientes con alta frecuencia de compra y un gasto significativo.  
-- **Grandes Compradores:** Clientes cuyo gasto total es alto, independientemente de la frecuencia de sus compras.  
-- **Clientes Frecuentes:** Clientes que compran con regularidad, aunque su gasto total no sea necesariamente alto.  
+- **Grandes Compradores:** Clientes cuyo gasto total es alto con una frecuencia de compra baja o moderada.  
+- **Clientes Frecuentes:** Clientes que compran con regularidad, aunque su gasto total es bajo o moderado.  
 - **Otros:** Clientes que no destacan en ninguna de las categorías anteriores.  
-
-Esta segmentación facilita la toma de decisiones estratégicas, como el diseño de campañas de fidelización o la reactivación de clientes inactivos.  
 
 ```sql
 ALTER TABLE analisis_rfm ADD COLUMN Segmento VARCHAR(50);
@@ -381,4 +379,15 @@ Aproximadamente el 8% de las ventas totales corresponden a devoluciones, lo que 
 
 **Segmentación de Clientes según Análisis RFM**
 
-La segmentación de clientes a través del análisis RFM (Recencia, Frecuencia y Valor Monetario) ha permitido identificar distintos grupos clave, como los "Mejores Clientes", "Clientes Premium" y "Clientes en Riesgo". Estos segmentos destacan no solo por su comportamiento de compra, sino también por su impacto en el negocio. Sin embargo, es importante notar que los segmentos de "Grandes Compradores" y "Clientes Frecuentes" son más específicos, ya que se caracterizan o bien por realizar compras menos frecuentes o por gastar menos en cada transacción. Esta clasificación proporciona una base sólida para diseñar estrategias de marketing y fidelización más personalizadas, permitiendo a la empresa enfocar sus esfuerzos en los segmentos más valiosos y desarrollar iniciativas específicas para reactivar a los clientes que se encuentran en riesgo de abandonar la plataforma.
+La segmentación de clientes a través del análisis RFM (Recencia, Frecuencia y Valor Monetario) ha permitido identificar distintos grupos clave, como los "Mejores Clientes", "Clientes Premium" y "Clientes en Riesgo". Estos segmentos destacan no solo por su comportamiento de compra, sino también por su impacto en el negocio, debido a su magnitud. Sin embargo, es importante notar que los segmentos de "Grandes Compradores" y "Clientes Frecuentes" son más específicos, ya que se caracterizan o bien por realizar compras menos frecuentes o por gastar menos en cada transacción. Esta clasificación proporciona una base sólida para diseñar estrategias de marketing y fidelización más personalizadas, permitiendo a la empresa enfocar sus esfuerzos en los segmentos más valiosos y desarrollar iniciativas específicas para reactivar a los clientes que se encuentran en riesgo de abandonar la plataforma.
+
+## Conclusión  
+
+El análisis del dataset de este e-commerce ha permitido extraer información valiosa sobre el comportamiento de los clientes, las tendencias de ventas y los desafíos que enfrenta el negocio. A través del análisis RFM, se identificaron segmentos clave de clientes que pueden ser aprovechados para diseñar estrategias de fidelización y optimización de ventas. Además, el estudio de las devoluciones ha puesto en evidencia la necesidad de mejorar la calidad del servicio y minimizar errores que generen reembolsos.  
+
+Por otro lado, el análisis geográfico y temporal ha revelado patrones de compra significativos, como el dominio del mercado del Reino Unido y la concentración de transacciones en horarios específicos del día. Asimismo, la identificación de productos con alta demanda y variabilidad mensual brinda oportunidades para mejorar la planificación del inventario y las estrategias de marketing.  
+
+En conclusión, este proyecto demuestra cómo el uso de SQL y Tableau permite transformar datos en información accionable para la toma de decisiones estratégicas. La integración de estos análisis en la operación del negocio puede conducir a una mayor eficiencia, optimización de ventas y una mejor experiencia para los clientes.  
+
+
+
