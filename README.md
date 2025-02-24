@@ -1,6 +1,6 @@
 # Análisis de E-commerce con MySQL y Tableau  
 
-![](https://www.ssi-schaefer.com/resource/blob/1207742/b5bdadcababc0904a574ea9d675870c3/e-commerce-hero-dam-image-en-31561--data.jpg)
+![](e-commerce-logo.jpg)
 
 ## Descripción del Proyecto
 
