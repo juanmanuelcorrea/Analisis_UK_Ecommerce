@@ -353,7 +353,7 @@ Para comunicar los hallazgos del análisis de datos de manera clara y efectiva, 
 
 El dashboard completo se encuentra publicado en **Tableau Public** y puede explorarse en el siguiente enlace:  
 
-🔗 [**Ver Dashboard en Tableau Public**](https://public.tableau.com/views/E-CommerceProject_17403561047400/Dashboard1?:language=es-ES&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)  
+🔗 [**Ver Dashboard en Tableau Public**](https://public.tableau.com/views/ProyectoE-commerce/Dashboard1?:language=es-ES&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)  
 
 ## Hallazgos
 
