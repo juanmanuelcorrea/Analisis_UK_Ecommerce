@@ -1,12 +1,12 @@
-# Análisis de E-commerce con MySQL y Tableau  
+# Análisis de E-commerce con MySQL
 
 ![](e-commerce-logo.jpg)
 
 ## Descripción del Proyecto
 
-Este proyecto consiste en un análisis completo de los datos de un e-commerce utilizando MySQL para la manipulación y análisis de datos, y Tableau para la visualización. El objetivo principal es extraer información valiosa a partir del dataset y responder diversas preguntas de negocio relacionadas con las ventas, devoluciones y comportamiento de los clientes.
+Este proyecto consiste en un análisis completo de los datos de un e-commerce utilizando MySQL para la manipulación y el análisis de datos. El objetivo principal es extraer información valiosa a partir del dataset y responder diversas preguntas de negocio relacionadas con las ventas, devoluciones y comportamiento de los clientes.
 
-A lo largo del proyecto, se llevan a cabo procesos de limpieza y transformación de datos, exploración de patrones de compra y segmentación de clientes mediante un Análisis RFM. Finalmente, los hallazgos clave se presentan en un dashboard interactivo en Tableau, facilitando la interpretación de los datos y la toma de decisiones.
+A lo largo del proyecto, se llevan a cabo procesos de limpieza y transformación de datos, exploración de patrones de compra y segmentación de clientes mediante un Análisis RFM.
 
 Este documento detalla los objetivos del análisis, la estructura del proyecto, las soluciones implementadas, los principales hallazgos y la conclusión final.
 
@@ -347,14 +347,6 @@ SET Segmento =
   END;
 ```
 
-### 6. Visualización en Tableau
-
-Para comunicar los hallazgos del análisis de datos de manera clara y efectiva, se creó un dashboard interactivo en **Tableau**. La visualización de datos en Tableau permitió transformar las consultas en SQL en gráficos interactivos, a partir de los cuales se pueden identificar patrones clave en el comportamiento de los clientes y en la dinámica de las ventas del e-commerce.
-
-El dashboard completo se encuentra publicado en **Tableau Public** y puede explorarse en el siguiente enlace:  
-
-🔗 [**Ver Dashboard en Tableau Public**](https://public.tableau.com/views/ProyectoE-commerce/Dashboard1?:language=es-ES&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)  
-
 ## Hallazgos
 
 **Evolución de Ventas Semanales**
@@ -387,7 +379,7 @@ El análisis del dataset de este e-commerce ha permitido extraer información va
 
 Por otro lado, el análisis geográfico y temporal ha revelado patrones de compra significativos, como el dominio del mercado del Reino Unido y la concentración de transacciones en horarios específicos del día. Asimismo, la identificación de productos con alta demanda y variabilidad mensual brinda oportunidades para mejorar la planificación del inventario y las estrategias de marketing.  
 
-En conclusión, este proyecto demuestra cómo el uso de SQL y Tableau permite transformar datos en información accionable para la toma de decisiones estratégicas. La integración de estos análisis en la operación del negocio puede conducir a una mayor eficiencia, optimización de ventas y una mejor experiencia para los clientes.  
+En conclusión, este proyecto demuestra cómo el uso de SQL permite transformar datos en información accionable para la toma de decisiones estratégicas. La integración de estos análisis en la operación del negocio puede conducir a una mayor eficiencia, optimización de ventas y una mejor experiencia para los clientes.  
 
 
 
